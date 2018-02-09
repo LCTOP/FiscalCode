@@ -1,9 +1,10 @@
 {
-    "name": "paral_proj/fiscal-code",
+    "name": "gugliotti-team/fiscal-code",
     "description": "Fiscal code calculator",
-    "type": "project",
+    "type": "library",
     "minimum-stability": "dev",
     "keywords": ["fiscal code", "fiscal", "code", "psr-4"],
+    "version": "0.1.0",
     "authors": [
         {
             "name": "Lorenzo Calamandrei",
@@ -15,6 +16,12 @@
         }
     ],
     "require": {
+        "php": ">=5.3.0",
         "phpunit/phpunit": "~6.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "FiscalCode\\": "src/FiscalCode"
+        }
     }
 }
