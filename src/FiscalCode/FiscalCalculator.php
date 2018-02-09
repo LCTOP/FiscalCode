@@ -2,7 +2,7 @@
 namespace FiscalCode;
 
 /**
- * Class Calculator
+ * Class FiscalCalculator
  *
  * Class for calculate fiscal code by user data
  * @author Michael Zangirolami <michael.zangirolami@triboo.it>
@@ -34,7 +34,7 @@ class FiscalCalculator
     /**
      * __construct
      *
-     * Calculator constructor.
+     * FiscalCalculator constructor.
      */
     public function __construct()
     {
@@ -82,7 +82,7 @@ class FiscalCalculator
 
         $fiscalCode .= $this->getCommon($common);
 
-        $fiscalCode .= $this->checkFiscalCode($fiscalCode);
+        $fiscalCode .= $this->checkLastLetterFiscalCode($fiscalCode);
 
         return $fiscalCode;
     }
@@ -205,7 +205,7 @@ class FiscalCalculator
      * @param string            $fiscalCode
      * @return bool|int|string
      */
-    public function checkFiscalCode($fiscalCode)
+    public function checkLastLetterFiscalCode($fiscalCode)
     {
         // control of param
         if (!$fiscalCode) {

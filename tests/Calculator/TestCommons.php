@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Calculator;
+namespace Tests\FiscalCalculator;
 
 use FiscalCode\FiscalCalculator;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  * @author Michael Zangirolami <michael.zangirolami@triboo.it>
  * @author Lorenzo Calamandrei <lorenzo.calamandrei@triboo.it>
  * @version 0.1.0
- * @package Tests\Calculator
+ * @package Tests\FiscalCalculator
  */
 final class TestCommons extends TestCase
 {

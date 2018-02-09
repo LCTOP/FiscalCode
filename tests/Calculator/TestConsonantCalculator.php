@@ -1,18 +1,18 @@
 <?php
-namespace Tests\Calculator;
+namespace Tests\FiscalCalculator;
 
 use FiscalCode\FiscalCalculator;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class TestConsonantCalculator
+ * Class TestConsonantFiscalCalculator
  *
  * @author Michael Zangirolami <michael.zangirolami@triboo.it>
  * @author Lorenzo Calamandrei <lorenzo.calamandrei@triboo.it>
  * @version 0.1.0
- * @package Tests\Calculator
+ * @package Tests\FiscalCalculator
  */
-final class TestConsonantCalculator extends TestCase
+final class TestConsonantFiscalCalculator extends TestCase
 {
 
     /**
