@@ -48,17 +48,34 @@ class FiscalCalculator
     }
 
     /**
+     * _construct
+     *
+     * @return array list of all
+     */
+    public static function _construct() {
+
+        $commons = array();
+        $commonsFile = fopen(__DIR__ . "/lib/commons.csv","r");
+
+        while (!feof($commonsFile)) {
+            array_push($commons, fgetcsv($commonsFile));
+        }
+        return $commons;
+    }
+
+    /**
      * calculate
      *
      * Calc the fiscal code by user data.
-     * @param string    $name
-     * @param string    $surname
-     * @param \DateTime $birthday
-     * @param string    $sex
-     * @param string    $common
+     * @param string     $name
+     * @param string     $surname
+     * @param \DateTime  $birthday
+     * @param string     $sex
+     * @param string     $common
+     * @param array|bool $commons
      * @return bool|string
      */
-    public function calculate($name, $surname, \DateTime $birthday, $sex, $common)
+    public static function calculate($name, $surname, \DateTime $birthday, $sex, $common, $commons = false)
     {
         // control of params
         if (!$name || !$surname || !$birthday || !$sex || !$common) {
@@ -68,8 +85,8 @@ class FiscalCalculator
         $fiscalCode = "";
 
         // get surname and name
-        $fiscalCode .= $this->getConsonant($surname);
-        $fiscalCode .= $this->getConsonant($name, true);
+        $fiscalCode .= self::getConsonant($surname);
+        $fiscalCode .= self::getConsonant($name, true);
 
         // get last two numbers of the years of birthday
         $yearBirth = $birthday->format("Y");
@@ -78,11 +95,15 @@ class FiscalCalculator
         // get letter linked to the months
         $fiscalCode .= self::months[(int) $birthday->format('m') - 1];
 
-        $fiscalCode .= $this->getFromBirthDay($birthday, $sex);
+        $fiscalCode .= self::getFromBirthDay($birthday, $sex);
 
-        $fiscalCode .= $this->getCommon($common);
+        if (!$commons) {
+            $commons = self::_construct();
+        }
 
-        $fiscalCode .= $this->checkLastLetterFiscalCode($fiscalCode);
+        $fiscalCode .= self::getCommon($common, $commons);
+
+        $fiscalCode .= self::checkLastLetterFiscalCode($fiscalCode);
 
         return $fiscalCode;
     }
@@ -95,7 +116,7 @@ class FiscalCalculator
      * @param bool      $isName If the word is the name, the second consonant must be skipped.
      * @return bool|string
      */
-    public function getConsonant($item, $isName = false)
+    private static function getConsonant($item, $isName = false)
     {
         // control for param
         if (!$item) {
@@ -152,7 +173,7 @@ class FiscalCalculator
      * @param string    $sex
      * @return bool|int
      */
-    public function getFromBirthDay(\DateTime $birthday, $sex)
+    protected static function getFromBirthDay(\DateTime $birthday, $sex)
     {
         // param control
         if (!$birthday || !$sex) {
@@ -172,10 +193,11 @@ class FiscalCalculator
      * getCommon
      *
      * Get common code by common name.
-     * @param string $common
+     * @param string $common common of the user
+     * @param array  $commons list of all commons
      * @return bool|string If mismatch commons return ????
      */
-    public function getCommon($common)
+    protected static function getCommon($common, $commons)
     {
         if (!$common) {
             return false;
@@ -185,7 +207,7 @@ class FiscalCalculator
 
         // sanitize the string of the common
         $common = str_replace(" ", "", ucwords($common));
-        foreach ($this->commons as $lineCommon) {
+        foreach ($commons as $lineCommon) {
 
             // sanitize the string of the common get by line in csv of commons
             $lineCommon[0] = str_replace(" ", "", ucwords($lineCommon[0]));
@@ -205,7 +227,7 @@ class FiscalCalculator
      * @param string            $fiscalCode
      * @return bool|int|string
      */
-    public function checkLastLetterFiscalCode($fiscalCode)
+    protected static function checkLastLetterFiscalCode($fiscalCode)
     {
         // control of param
         if (!$fiscalCode) {
