@@ -30,6 +30,7 @@ class FiscalCalculator
         );
 
     private $commons;
+    private $foreign;
 
     /**
      * __construct
@@ -42,12 +43,17 @@ class FiscalCalculator
         $this->foreign = array();
         $commonsFile = fopen(__DIR__ . "/lib/commons.csv","r");
         $foreignFile = fopen(__DIR__ . "/lib/foreign.csv", 'r');
-        while (!feof($commonsFile, $foreignFile)) {
+
+        while (!feof($commonsFile)) {
             array_push($this->commons, fgetcsv($commonsFile));
+        }
+
+        while (!feof($foreignFile)) {
             array_push($this->foreign, fgetcsv($foreignFile));
         }
 
-        fclose($commonsFile, $foreignFile);
+        fclose($commonsFile);
+        fclose($foreignFile);
     }
 
     /**
@@ -218,7 +224,7 @@ class FiscalCalculator
         $found = false;
 
         // sanitize the string of foreign
-        $foreign =  str_replace(" ", "", ucword($foreign));
+        $foreign =  str_replace(" ", "", ucwords($foreign));
 
         foreach ($this->foreign as $lineForeign) {
 
