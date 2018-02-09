@@ -116,7 +116,7 @@ class FiscalCalculator
      * @param bool      $isName If the word is the name, the second consonant must be skipped.
      * @return bool|string
      */
-    private static function getConsonant($item, $isName = false)
+    public static function getConsonant($item, $isName = false)
     {
         // control for param
         if (!$item) {
@@ -170,17 +170,22 @@ class FiscalCalculator
      *
      * Get numbers by sex and birthday, for female + 40 to the return
      * @param \DateTime $birthday
-     * @param string    $sex
+     * @param string|bool    $sex
      * @return bool|int
      */
-    protected static function getFromBirthDay(\DateTime $birthday, $sex)
+    public static function getFromBirthDay(\DateTime $birthday, $sex)
     {
         // param control
-        if (!$birthday || !$sex) {
+        if (!$birthday) {
             return false;
         }
 
         $day = $birthday->format('d');
+
+        // if sex is false, is assumed that is not known
+        if (!$sex) {
+            return $day;
+        }
 
         // add 0 if birthday is under 10
         if ($sex === "M") {
@@ -197,7 +202,7 @@ class FiscalCalculator
      * @param array  $commons list of all commons
      * @return bool|string If mismatch commons return ????
      */
-    protected static function getCommon($common, $commons)
+    public static function getCommon($common, $commons)
     {
         if (!$common) {
             return false;
@@ -227,7 +232,7 @@ class FiscalCalculator
      * @param string            $fiscalCode
      * @return bool|int|string
      */
-    protected static function checkLastLetterFiscalCode($fiscalCode)
+    public static function checkLastLetterFiscalCode($fiscalCode)
     {
         // control of param
         if (!$fiscalCode) {
