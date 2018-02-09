@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Calculator;
 
-use FiscalCode\Calculator;
+use FiscalCode\FiscalCalculator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,22 +17,22 @@ final class TestCommons extends TestCase
     /**
      * testOneCommon
      *
-     * @covers Calculator::getCommon()
+     * @covers FiscalCalculator::getCommon()
      */
     public function testOneCommon()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals('D612', $calc->getCommon("Firenze"));
     }
 
     /**
  * testWrongCommon
  *
- * @covers Calculator::getCommon()
+ * @covers FiscalCalculator::getCommon()
  */
     public function testWrongCommon()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertNotEquals('MI', $calc->getCommon("Milano"));
     }
 }

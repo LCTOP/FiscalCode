@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Calculator;
 
-use FiscalCode\Calculator;
+use FiscalCode\FiscalCalculator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,13 +16,13 @@ final class TestCheckFiscalCode extends TestCase
 {
     public function testCheckFiscalCode()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals("R", $calc->checkFiscalCode("SCCNTN91A01A757"));
     }
 
     public function testCheckFiscalCode2()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals("B", $calc->checkFiscalCode("PLLLSE87H44A089"));
     }
 }

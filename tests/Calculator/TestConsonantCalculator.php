@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Calculator;
 
-use FiscalCode\Calculator;
+use FiscalCode\FiscalCalculator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,11 +19,11 @@ final class TestConsonantCalculator extends TestCase
      * testSurname
      *
      * Get consonant from a full consonant surname example.
-     * @covers Calculator::getConsonant()
+     * @covers FiscalCalculator::getConsonant()
      */
     public function testSurname()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals("SRN", $calc->getConsonant("Surname"));
     }
 
@@ -31,11 +31,11 @@ final class TestConsonantCalculator extends TestCase
      * testSurnameShort
      *
      * Get consonant, vowel and "X" from a surname example.
-     * @covers Calculator::getConsonant()
+     * @covers FiscalCalculator::getConsonant()
      */
     public function testSurnameShort()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals("BAX", $calc->getConsonant("AB"));
     }
 
@@ -43,11 +43,11 @@ final class TestConsonantCalculator extends TestCase
      * testName
      *
      * Get consonant from the name example.
-     * @covers Calculator::getConsonant()
+     * @covers FiscalCalculator::getConsonant()
      */
     public function testName()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals("MHL", $calc->getConsonant("Michael", true));
     }
 
@@ -55,11 +55,11 @@ final class TestConsonantCalculator extends TestCase
      * testNameVowel
      *
      * Get consonant fiscal code style from a short name.
-     * @covers Calculator::getConsonant()
+     * @covers FiscalCalculator::getConsonant()
      */
     public function testNameVowel()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals("LAI", $calc->getConsonant("Alice", true));
     }
 
@@ -67,11 +67,11 @@ final class TestConsonantCalculator extends TestCase
      * testDoubleName
      *
      * Get consonant fiscal code style from a name with second name.
-     * @covers Calculator::getConsonant()
+     * @covers FiscalCalculator::getConsonant()
      */
     public function testDoubleName()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals("GNG", $calc->getConsonant("Giulia Angela", true ));
     }
 }

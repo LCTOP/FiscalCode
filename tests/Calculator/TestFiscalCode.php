@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Calculator;
 
-use FiscalCode\Calculator;
+use FiscalCode\FiscalCalculator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,11 +42,11 @@ final class TestFiscalCode extends TestCase
     /**
      * testFiscalCode
      *
-     * @covers Calculator::calculate()
+     * @covers FiscalCalculator::calculate()
      */
     public function testFiscalCode()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         if (is_array($this->users)) {
             foreach ($this->users as $user) {
                 $this->assertEquals(

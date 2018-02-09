@@ -10,7 +10,7 @@ namespace FiscalCode;
  * @version 0.1.0
  * @package FiscalCode
  */
-class Calculator
+class FiscalCalculator
 {
     const vowel = array("A", "E", "I", "O", "U"),
         months = array("A", "B", "C", "D", "E", "H", "L", "M", "P", "R", "S", "T"),

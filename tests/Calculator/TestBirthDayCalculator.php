@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Calculator;
 
-use FiscalCode\Calculator;
+use FiscalCode\FiscalCalculator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,11 +19,11 @@ final class TestBirthDayCalculator extends TestCase
      * testBirthDayForMale
      *
      * Get code by birthday for a male.
-     * @covers Calculator::getFromBirthDay()
+     * @covers FiscalCalculator::getFromBirthDay()
      */
     public function testBirthDayForMale()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals("01", $calc->getFromBirthDay(
             \DateTime::createFromFormat('d', 1), "M")
         );
@@ -33,11 +33,11 @@ final class TestBirthDayCalculator extends TestCase
      * testBirthDayForFemale
      *
      * Get code by birthday for a female.
-     * @covers Calculator::getFromBirthDay()
+     * @covers FiscalCalculator::getFromBirthDay()
      */
     public function testBirthDayForFemale()
     {
-        $calc = new Calculator();
+        $calc = new FiscalCalculator();
         $this->assertEquals("59", $calc->getFromBirthDay(
             \DateTime::createFromFormat('d', 19), "F")
         );
