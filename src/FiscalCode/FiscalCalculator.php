@@ -118,7 +118,7 @@ class FiscalCalculator
         $fiscalCode .= $yearBirth[2] . $yearBirth[3];
 
         // get letter linked to the months
-        $fiscalCode .= self::months[(int)$birthday->format('m') - 1];
+        $fiscalCode .= self::months[(int) $birthday->format('m') - 1];
 
         $fiscalCode .= self::getFromBirthDay($birthday, $sex);
 
@@ -203,7 +203,7 @@ class FiscalCalculator
      * @return bool|string
      * @throws \Exception
      */
-    protected static function getGlobalCommon ($common, $country, $italian_commons, $foreign_commons)
+    public static function getGlobalCommon ($common, $country, $italian_commons, $foreign_commons)
     {
         // check if country is italy or abroad
         if ($country == self::CUSTOMER_ITALIAN) {

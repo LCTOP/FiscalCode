@@ -44,6 +44,7 @@ final class TestFiscalCode extends TestCase
     /**
      * testFiscalCode
      *
+     * @throws \Exception
      * @covers FiscalCalculator::calculate()
      */
     public function testFiscalCode()
