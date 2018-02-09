@@ -61,15 +61,25 @@ class FiscalCalculator
      *
      * @return array list of all
      */
-    public static function _construct() {
-
+    public static function _construct()
+    {
         $commons = array();
+        $foreign = array();
         $commonsFile = fopen(__DIR__ . "/lib/commons.csv","r");
+        $foreignFile = fopen(__DIR__ . "/lib/foreign.csv", 'r');
 
         while (!feof($commonsFile)) {
             array_push($commons, fgetcsv($commonsFile));
         }
-        return $commons;
+
+        while (!feof($foreignFile)) {
+            array_push($foreign, fgetcsv($foreignFile));
+        }
+
+        fclose($commonsFile);
+        fclose($foreignFile);
+
+        return array($commons, $foreign);
     }
 
     /**
@@ -106,11 +116,15 @@ class FiscalCalculator
 
         $fiscalCode .= self::getFromBirthDay($birthday, $sex);
 
+        // TODO: to remove
+        $italian_commons = array();
+
         if (!$commons) {
-            $commons = self::_construct();
+            list($italian_commons, $foreign_commons) = self::_construct();
         }
 
-        $fiscalCode .= self::getCommon($common, $commons);
+        // TODO: to insert in an if statement
+        $fiscalCode .= self::getCommon($common, $italian_commons);
 
         $fiscalCode .= self::checkLastLetterFiscalCode($fiscalCode);
 
