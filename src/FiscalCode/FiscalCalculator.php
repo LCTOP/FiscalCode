@@ -30,6 +30,7 @@ class FiscalCalculator
         );
 
     private $commons;
+    private $foreign;
 
     /**
      * __construct
@@ -39,12 +40,20 @@ class FiscalCalculator
     public function __construct()
     {
         $this->commons = array();
+        $this->foreign = array();
         $commonsFile = fopen(__DIR__ . "/lib/commons.csv","r");
+        $foreignFile = fopen(__DIR__ . "/lib/foreign.csv", 'r');
+
         while (!feof($commonsFile)) {
             array_push($this->commons, fgetcsv($commonsFile));
         }
 
+        while (!feof($foreignFile)) {
+            array_push($this->foreign, fgetcsv($foreignFile));
+        }
+
         fclose($commonsFile);
+        fclose($foreignFile);
     }
 
     /**
@@ -52,15 +61,25 @@ class FiscalCalculator
      *
      * @return array list of all
      */
-    public static function _construct() {
-
+    public static function _construct()
+    {
         $commons = array();
+        $foreign = array();
         $commonsFile = fopen(__DIR__ . "/lib/commons.csv","r");
+        $foreignFile = fopen(__DIR__ . "/lib/foreign.csv", 'r');
 
         while (!feof($commonsFile)) {
             array_push($commons, fgetcsv($commonsFile));
         }
-        return $commons;
+
+        while (!feof($foreignFile)) {
+            array_push($foreign, fgetcsv($foreignFile));
+        }
+
+        fclose($commonsFile);
+        fclose($foreignFile);
+
+        return array($commons, $foreign);
     }
 
     /**
@@ -73,9 +92,11 @@ class FiscalCalculator
      * @param string     $sex
      * @param string     $common
      * @param array|bool $commons
+     * @param string     $country
+     * @throws \Exception
      * @return bool|string
      */
-    public static function calculate($name, $surname, \DateTime $birthday, $sex, $common, $commons = false)
+    public static function calculate($name, $surname, \DateTime $birthday, $sex, $common, $commons = false, $country)
     {
         // control of params
         if (!$name || !$surname || !$birthday || !$sex || !$common) {
@@ -93,15 +114,18 @@ class FiscalCalculator
         $fiscalCode .= $yearBirth[2] . $yearBirth[3];
 
         // get letter linked to the months
-        $fiscalCode .= self::months[(int) $birthday->format('m') - 1];
+        $fiscalCode .= self::months[(int)$birthday->format('m') - 1];
 
         $fiscalCode .= self::getFromBirthDay($birthday, $sex);
 
+        $italian_commons = array();
+        $foreign_commons = array();
+
         if (!$commons) {
-            $commons = self::_construct();
+            list($italian_commons, $foreign_commons) = self::_construct();
         }
 
-        $fiscalCode .= self::getCommon($common, $commons);
+        $fiscalCode .= self::getGlobalCommon($common, $country, $italian_commons, $foreign_commons);
 
         $fiscalCode .= self::checkLastLetterFiscalCode($fiscalCode);
 
@@ -166,6 +190,31 @@ class FiscalCalculator
     }
 
     /**
+     * getGlobalCommon
+     *
+     * @param $common
+     * @param $country
+     * @param $italian_commons
+     * @param $foreign_commons
+     * @return bool|string
+     * @throws \Exception
+     */
+    protected static function getGlobalCommon ($common, $country, $italian_commons, $foreign_commons)
+    {
+
+        // check if country is italy or abroad
+        if ($country == "italy") {
+            $country = self::getCommon($common, $italian_commons);
+        } elseif ($country == "abroad") {
+            $country = self::getCommon($common, $foreign_commons);
+        } else {
+            throw new \Exception("You come from moon or mars, or you just need to select valid option");
+        }
+
+        return $country;
+    }
+
+    /**
      * getFromBirthDay
      *
      * Get numbers by sex and birthday, for female + 40 to the return
@@ -222,6 +271,38 @@ class FiscalCalculator
         }
 
         // if not found return ???? because the common isn't found in list
+        return !$found ? '????' : $found;
+    }
+
+    /**
+     *
+     * getForeign
+     *
+     * Get foreign code by foreign state name
+     * @param string $foreign
+     * @return string
+     */
+    protected function getForeign($foreign)
+    {
+        if (!$foreign) {
+            return false;
+        }
+
+        $found = false;
+
+        // sanitize the string of foreign
+        $foreign =  str_replace(" ", "", ucwords($foreign));
+
+        foreach ($this->foreign as $lineForeign) {
+
+            //sanitize the string of the foreign get by line in csv of foreign
+            $lineForeign[1] = str_replace(" ", "", ucwords($lineForeign[1]));
+            if ($foreign == $lineForeign[1]) {
+                $found = $lineForeign[0];
+            }
+        }
+
+        //if not found return ???? because the foreign isn't found in the list
         return !$found ? '????' : $found;
     }
 
