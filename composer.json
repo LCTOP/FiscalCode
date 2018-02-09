@@ -1,0 +1,20 @@
+{
+    "name": "paral_proj/fiscal-code",
+    "description": "Fiscal code calculator",
+    "type": "project",
+    "minimum-stability": "dev",
+    "keywords": ["fiscal code", "fiscal", "code", "psr-4"],
+    "authors": [
+        {
+            "name": "Lorenzo Calamandrei",
+            "email": "lorenzo.calamandrei@triboo.it"
+        },
+        {
+            "name": "Michael Zangirolami",
+            "email": "michael.zangirolami@triboo.it"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "~6.5"
+    }
+}
