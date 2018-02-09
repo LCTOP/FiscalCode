@@ -26,6 +26,7 @@ final class TestFiscalCode extends TestCase
                 "sex" =>  "F",
                 "birthday" => "1987-06-04",
                 "common" => "Agrigento",
+                "country" => FiscalCalculator::CUSTOMER_ITALIAN,
                 "assert" => "PLLLSE87H44A089B",
             ),
             array(
@@ -33,8 +34,9 @@ final class TestFiscalCode extends TestCase
                 "surname" => "Sacchi",
                 "sex" =>  "M",
                 "birthday" => "1991-01-01",
-                "common" => "Belluno",
-                "assert" => "SCCNTN91A01A757R",
+                "common" => "AFGHANISTAN",
+                "country" => FiscalCalculator::CUSTOMER_ABROAD,
+                "assert" => "SCCNTN91A01Z200J",
             ),
         );
     }
@@ -55,7 +57,8 @@ final class TestFiscalCode extends TestCase
                         $user["surname"],
                         new \DateTime($user["birthday"]),
                         $user["sex"],
-                        $user["common"]
+                        $user["common"],
+                        $user["country"]
                     )
                 );
             }

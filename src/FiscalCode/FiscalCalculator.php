@@ -7,11 +7,15 @@ namespace FiscalCode;
  * Class for calculate fiscal code by user data
  * @author Michael Zangirolami <michael.zangirolami@triboo.it>
  * @author Lorenzo Calamandrei <lorenzo.calamandrei@triboo.it>
+ * @author Davide Luca <davide.luca@thinkopen.it>
  * @version 0.1.0
  * @package FiscalCode
  */
 class FiscalCalculator
 {
+    const CUSTOMER_ITALIAN = 'italy',
+        CUSTOMER_ABROAD = 'abroad';
+    
     const vowel = array("A", "E", "I", "O", "U"),
         months = array("A", "B", "C", "D", "E", "H", "L", "M", "P", "R", "S", "T"),
         checkOdd = array(
@@ -96,7 +100,7 @@ class FiscalCalculator
      * @throws \Exception
      * @return bool|string
      */
-    public static function calculate($name, $surname, \DateTime $birthday, $sex, $common, $commons = false, $country)
+    public static function calculate($name, $surname, \DateTime $birthday, $sex, $common, $country, $commons = false)
     {
         // control of params
         if (!$name || !$surname || !$birthday || !$sex || !$common) {
@@ -201,14 +205,13 @@ class FiscalCalculator
      */
     protected static function getGlobalCommon ($common, $country, $italian_commons, $foreign_commons)
     {
-
         // check if country is italy or abroad
-        if ($country == "italy") {
+        if ($country == self::CUSTOMER_ITALIAN) {
             $country = self::getCommon($common, $italian_commons);
-        } elseif ($country == "abroad") {
+        } elseif ($country == self::CUSTOMER_ABROAD) {
             $country = self::getCommon($common, $foreign_commons);
         } else {
-            throw new \Exception("You come from moon or mars, or you just need to select valid option");
+            throw new \Exception("Country not specified or invalid.");
         }
 
         return $country;
@@ -246,12 +249,13 @@ class FiscalCalculator
     /**
      * getCommon
      *
-     * Get common code by common name.
-     * @param string $common common of the user
-     * @param array  $commons list of all commons
-     * @return bool|string If mismatch commons return ????
+     * Get foreign code by foreign state name
+     * @param string $common
+     * @param array $commons
+     * @throws \Exception
+     * @return string
      */
-    public static function getCommon($common, $commons)
+    protected static function getCommon($common, $commons)
     {
         if (!$common) {
             return false;
@@ -259,51 +263,22 @@ class FiscalCalculator
 
         $found = false;
 
-        // sanitize the string of the common
-        $common = str_replace(" ", "", ucwords($common));
+        // sanitize the string of foreign
+        $common =  str_replace(" ", "", ucwords($common));
+
         foreach ($commons as $lineCommon) {
 
-            // sanitize the string of the common get by line in csv of commons
-            $lineCommon[0] = str_replace(" ", "", ucwords($lineCommon[0]));
-            if ($common == $lineCommon[0]) {
-                $found = $lineCommon[2];
-            }
-        }
-
-        // if not found return ???? because the common isn't found in list
-        return !$found ? '????' : $found;
-    }
-
-    /**
-     *
-     * getForeign
-     *
-     * Get foreign code by foreign state name
-     * @param string $foreign
-     * @return string
-     */
-    protected function getForeign($foreign)
-    {
-        if (!$foreign) {
-            return false;
-        }
-
-        $found = false;
-
-        // sanitize the string of foreign
-        $foreign =  str_replace(" ", "", ucwords($foreign));
-
-        foreach ($this->foreign as $lineForeign) {
-
             //sanitize the string of the foreign get by line in csv of foreign
-            $lineForeign[1] = str_replace(" ", "", ucwords($lineForeign[1]));
-            if ($foreign == $lineForeign[1]) {
-                $found = $lineForeign[0];
+            $lineCommon[1] = str_replace(" ", "", ucwords($lineCommon[1]));
+            if ($common == $lineCommon[1]) {
+                $found = $lineCommon[0];
             }
         }
 
-        //if not found return ???? because the foreign isn't found in the list
-        return !$found ? '????' : $found;
+        if (!$found) {
+            throw new \Exception('Common not valid.');
+        }
+        return $found;
     }
 
     /**
