@@ -1,5 +1,5 @@
 # Fiscal Code
-###### v 0.1.0
+###### v 1.0.0
 
 This module calculate the fiscal code of a person by information.
 
