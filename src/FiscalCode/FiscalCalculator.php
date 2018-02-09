@@ -39,12 +39,15 @@ class FiscalCalculator
     public function __construct()
     {
         $this->commons = array();
+        $this->foreign = array();
         $commonsFile = fopen(__DIR__ . "/lib/commons.csv","r");
-        while (!feof($commonsFile)) {
+        $foreignFile = fopen(__DIR__ . "/lib/foreign.csv", 'r');
+        while (!feof($commonsFile, $foreignFile)) {
             array_push($this->commons, fgetcsv($commonsFile));
+            array_push($this->foreign, fgetcsv($foreignFile));
         }
 
-        fclose($commonsFile);
+        fclose($commonsFile, $foreignFile);
     }
 
     /**
@@ -195,6 +198,38 @@ class FiscalCalculator
         }
 
         // if not found return ???? because the common isn't found in list
+        return !$found ? '????' : $found;
+    }
+
+    /**
+     *
+     * getForeign
+     *
+     * Get foreign code by foreign state name
+     * @param string $foreign
+     * @return string
+     */
+    protected function getForeign($foreign)
+    {
+        if (!$foreign) {
+            return false;
+        }
+
+        $found = false;
+
+        // sanitize the string of foreign
+        $foreign =  str_replace(" ", "", ucword($foreign));
+
+        foreach ($this->foreign as $lineForeign) {
+
+            //sanitize the string of the foreign get by line in csv of foreign
+            $lineForeign[1] = str_replace(" ", "", ucwords($lineForeign[1]));
+            if ($foreign == $lineForeign[1]) {
+                $found = $lineForeign[0];
+            }
+        }
+
+        //if not found return ???? because the foreign isn't found in the list
         return !$found ? '????' : $found;
     }
 
