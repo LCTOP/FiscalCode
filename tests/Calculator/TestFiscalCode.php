@@ -46,12 +46,11 @@ final class TestFiscalCode extends TestCase
      */
     public function testFiscalCode()
     {
-        $calc = new FiscalCalculator();
         if (is_array($this->users)) {
             foreach ($this->users as $user) {
                 $this->assertEquals(
                     $user["assert"],
-                    $calc->calculate(
+                    FiscalCalculator::calculate(
                         $user["name"],
                         $user["surname"],
                         new \DateTime($user["birthday"]),
